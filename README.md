@@ -36,7 +36,10 @@ You can also just use the mount trick to make king.txt read-only.
 - Add counter measures for other king.txt tricks (like the mount trick)
 - The little script the cron job calls is sloppy and will start the whole script over
 even the downloading the bins and such. Gotta clean that up.
+- Auto detect if curl and wget are on the VM and choose which one to use.
+- Parse some args so this thing can be a little more dynamic.
 - Re-write this REAME. It's also sloppy. But hey! It's late! Give me a break! haha
 
 ## Version Notes
-v0.1 - Initial release written after some shower thoughts late at night
+- v0.1 - Initial release written after some shower thoughts late at night
+- v0.2 - Added steps to rename the busybox bins and make them executable (don't know how I missed this...), added wget commands for the bins (just in case), and added some noclobber stuff. Also, updated "Future Plans" section of README.
