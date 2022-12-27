@@ -43,3 +43,4 @@ even the downloading the bins and such. Gotta clean that up.
 ## Version Notes
 - v0.1 - Initial release written after some shower thoughts late at night
 - v0.2 - Added steps to rename the busybox bins and make them executable (don't know how I missed this...), added wget commands for the bins (just in case), and added some noclobber stuff. Also, updated "Future Plans" section of README.
+- v0.3 - Fixed the cronjob section since it was not working and creating way too many processes
