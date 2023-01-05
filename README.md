@@ -32,9 +32,9 @@ You can also be super 31337 with this one-liner to do everything:
 
 ## How it works
 KingMe sets up a secret working directory, and then downloads several busybox bins to that
-working directory. This will allow the script to run properly even if at some point the bins
-on the KotH VM are moved or messed with. The script then sets up a cron job to maintain your reign in 
-case the user's shell is terminated or the script stops running for some reason. Finally, 
+working directory. Then it uses random characters to rename these binaries.
+This will allow the script to run properly even if at some point the bins
+on the KotH VM are moved or messed with. Finally, 
 the magic happens. Every second KingMe checks /root/king.txt for your username. If it's not 
 there, it puts your username in king.txt. It also locks the file with chattr making it more
 difficult to edit by other players. This should maintain a player as king indefinitely, unless
@@ -42,7 +42,7 @@ another player figures out what's going on and stops it.
 
 ## How to defeat KingMe
 Simply finding and removing the secret working directory will break this script since it relies on 
-bins located in that directory. Also, removing the crontab entry, and killing any running processes 
+bins located in that directory. Also, killing any running processes 
 should do the trick as well.
 
 ## Future Plans
@@ -67,3 +67,9 @@ should do the trick as well.
   - Made the secret working directory dynamic
   - Removed curl commands in favor of wget commands
   - Cleaned up README
+- v1.1
+  - This version was created by Primary73!
+  - Added the random naming of the busybox binaries
+  - Added logic to choose between curl and wget
+  - Process is now hidden
+  - Removed the cronjob stuff since it was giving away the hidden directory
