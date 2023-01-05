@@ -7,10 +7,10 @@
 #| $$  $$    | $$  | $$  $$$$| $$|_  $$      | $$  $$$| $$| $$__/   
 #| $$\  $$   | $$  | $$\  $$$| $$  \ $$      | $$\  $ | $$| $$      
 #| $$ \  $$ /$$$$$$| $$ \  $$|  $$$$$$/      | $$ \/  | $$| $$$$$$$$
-#|__/  \__/|______/|__/  \__/ \______/       |__/     |__/|________/ v1.0                         
+#|__/  \__/|______/|__/  \__/ \______/       |__/     |__/|________/ v1.1                         
 #
 # Auto king script for THM KotH
-# Written by Squ1rr3l (aka redsquirrel_7)
+# Written by Squ1rr3l (aka redsquirrel_7) and Primary73
 #
 # DISCLAIMER: I'm pretty sure this isn't against the rules, but
 # I am not responsible if you get banned for using this script!
